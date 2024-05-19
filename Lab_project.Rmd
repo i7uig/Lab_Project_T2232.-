@@ -28,7 +28,9 @@ library(ggrepel)
 
 `1. (2 points)
 ```{r}
-
+# Count the number of pets
+num_pets <- nrow(seattlepets)
+num_pets
 ```
 Write your narrative here
 
@@ -38,7 +40,9 @@ Write your narrative here
 `2. (2 points)
 
 ```{r}
-
+# Count the number of variables
+num_variables <- ncol(seattlepets)
+num_variables
 ```
 Write your narrative below
 
@@ -46,21 +50,37 @@ Write your narrative below
 
 `3. (2 points)
 ```{r}
-
+# Count the frequency of each species
+species_count <- table(seattlepets$species)
+species_count
 ```
 Write your narrative here
 
 
 `4. (2 points)
 ```{r}
+# Count the frequency of each pet name
+pet_name_frequency <- table(seattlepets$animal_name)
 
+# Sort the frequency table in descending order
+sorted_pet_names <- sort(pet_name_frequency, decreasing = TRUE)
+
+# Display the top ten most common pet names
+head(sorted_pet_names,10)
 ```
 Write your narrative here
 
 
 `5. (2 points)
 ```{r}
+# Filter records for species Pig
+pig_records <- filter(seattlepets, species == "Pig")
 
+# Arrange the filtered records by pet names (animal_name)
+sorted_pig_records <- arrange(pig_records, animal_name)
+
+# Display the sorted pig records
+sorted_pig_records
 ```
 Write your narrative here
 
@@ -69,7 +89,14 @@ Write your narrative here
 
 `6. (2 points)
 ```{r}
+# Select only pet name (animal_name) and primary breed for species Goat
+goat_records <- select(filter(seattlepets, species == "Goat"), animal_name, primary_breed)
 
+# Arrange the selected records by pet names (animal_name)
+sorted_goat_records <- arrange(goat_records, animal_name)
+
+# Display the sorted goat records
+sorted_goat_records
 ```
 Write your narrative here
 
@@ -79,7 +106,17 @@ Write your narrative here
 
 `7. (2 points)
 ```{r}
+library(dplyr)
 
+# Concatenate animal_name and species into a single column named pet
+seattlepets <- mutate(seattlepets, pet = paste(animal_name, species, sep = " - "))
+
+# Select license_number and pet, then arrange by pet
+sorted_records <- select(seattlepets, license_number, pet) %>%
+                  arrange(pet)
+
+# Display the sorted records
+sorted_records
 ```
 Write your narrative here
 
@@ -87,7 +124,16 @@ Write your narrative here
 
 `8. (2 points)
 ```{r}
+library(ggplot2)
 
+# Create a bar plot of species counts
+species_plot <- ggplot(seattlepets, aes(x = species)) +
+                geom_bar() +
+                labs(title = "Counts of Species", x = "Species", y = "Count") +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Display the plot
+print(species_plot)
 ```
 Write your narrative here
 
@@ -98,23 +144,29 @@ Write your narrative here
 ```{r}
 top_10_names <- seattlepets %>% 
 filter(animal_name %in% c( "Lucy"  , "Charlie" , "Luna" , "Bella" , "Max"    , 
-                           "Daisy" , "Molly"   , "Jack" , "Lily"  , "Stella" ))
+                           "Daisy" , "Molly"   , "Jack" , "Lily"  , "Stella"))
 top_10_names
 ```
 `a.	What does the above code chunk do?
-
-
-
-`b. Plot the counts of the pet names (animal_name) in top_10_names
 ```{r}
 
 ```
+`b. Plot the counts of the pet names (animal_name) in top_10_names
+```{r}
+# Create a subset of data for the top 10 most common pet names
+top_10_names <- c("Lucy", "Charlie", "Luna", "Bella", "Max", "Cooper", "Daisy", "Buddy", "Molly", "Stella")
+top_10_subset <- filter(seattlepets, animal_name %in% top_10_names)
 
+# Plot the counts of the pet names segmented by species
+pet_names_plot <- ggplot(top_10_subset, aes(x = animal_name, fill = species)) +
+                  geom_bar(position = "dodge") +
+                  labs(title = "Counts of Top 10 Pet Names Segmented by Species", x = "Pet Name", y = "Count") +
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-`10.  (2 points)
-
-`The below code plots the proportion of dogs with a given name versus the proportion of cats with the same name. The 20 most common cat and dog names are displayed. The diagonal line on the plot is the x = y line; if a name appeared on this line, the name’s popularity would be exactly the same for dogs and cats.
-
+# Display the plot
+print(pet_names_plot)
+```
+`10. (2 points)
 ```{r eval = TRUE, echo = FALSE, fig.fullwidth = TRUE}
 # data prep
 name_props <- seattlepets %>% 
@@ -159,17 +211,14 @@ ggplot(comb_name_props, aes(x = cat_prop, y = dog_prop)) +
       image = "1f436", aes(x = 0.003, y = 0.009), size = 0.1
       ) +
   ggimage::geom_emoji(
-      image = "1f431", aes(x = 0.009, y = 0.003), size = 0.1
-      )
+      image = "1f431", aes(x = 0.009, y = 0.003), size =0.1)
 ```
-
 `What names are more common for cats than dogs? The ones above the line or the ones below the line?
 
-`Answer here..................
+`Answer here...Dog:Lucy.Cat:Luna...............
 
 
 
 `Is the relationship between the two variables (proportion of cats with a given name and proportion of dogs with a given name) positive or negative? What does this mean in context of the data?
 
-`Answer here .............
-
+`Answer here .Positive,as the popularity of a name for dogs increases,so does the popularity of that name for cats............
