@@ -1,6 +1,6 @@
 DSC 200 Lab Project -Term 2232
 ================
-2024-05-19
+2024-05-20
 
 **Student Name:\< Aminah Mohammead Almutairi\>**
 
@@ -30,7 +30,11 @@ num_pets
 
     ## [1] 52519
 
-Write your narrative here
+Write your narrative here nrow() is a function in R that returns the
+number of rows in a dataset. seattlepets is assumed to be the name of
+your dataset containing information about pets. The result of
+nrow(seattlepets) is assigned to the variable num_pets, which will
+contain the total number of pets in the dataset.
 
 \`2. (2 points)
 
@@ -42,7 +46,11 @@ num_variables
 
     ## [1] 7
 
-Write your narrative below
+Write your narrative below ncol() is a function in R that returns the
+number of columns in a dataset. seattlepets is assumed to be the name of
+your dataset containing information about pets. The result of
+ncol(seattlepets) is assigned to the variable num_variables, which will
+contain the total number of variables (columns) in the dataset.
 
 \`3. (2 points)
 
@@ -56,7 +64,12 @@ species_count
     ##   Cat   Dog  Goat   Pig 
     ## 17294 35181    38     6
 
-Write your narrative here
+Write your narrative here table() is a function in R used to tabulate
+the counts of data values.
+seattlepets$species assumes that "seattlepets" is the name of your dataset and "species" is the column containing species information. table(seattlepets$species)
+creates a table that shows the frequency of each unique species in the
+dataset. The result is stored in the variable species_count, which holds
+the frequency counts of each species.
 
 \`4. (2 points)
 
@@ -75,7 +88,13 @@ head(sorted_pet_names,10)
     ##    Lucy Charlie    Luna   Bella     Max   Daisy   Molly    Jack    Lily  Stella 
     ##     439     387     355     331     270     261     240     232     232     227
 
-Write your narrative here
+Write your narrative here table(seattlepets\$animal_name) creates a
+frequency table of pet names in the “seattlepets” dataset. sort() sorts
+the frequency table in descending order of counts. By default, it sorts
+in ascending order, but by specifying decreasing = TRUE, it sorts in
+descending order. head(sorted_pet_names, 10) displays the first ten
+entries of the sorted frequency table, which represent the top ten most
+common pet names.
 
 \`5. (2 points)
 
@@ -102,6 +121,14 @@ sorted_pig_records
     ## # ℹ 2 more variables: secondary_breed <chr>, zip_code <chr>
 
 Write your narrative here
+
+filter(seattlepets, species == “Pig”) filters the dataset “seattlepets”
+to include only records where the species is labeled as “Pig”. This
+creates a new dataset named “pig_records”. arrange(pig_records,
+animal_name) sorts the “pig_records” dataset by the column “animal_name”
+in ascending order by default. The sorted pig records are then stored in
+the variable sorted_pig_records. sorted_pig_records is then displayed,
+showing the filtered and sorted records of pigs.
 
 \`6. (2 points)
 
@@ -132,6 +159,17 @@ sorted_goat_records
     ## # ℹ 28 more rows
 
 Write your narrative here
+
+filter(seattlepets, species == “Goat”) filters the dataset “seattlepets”
+to include only records where the species is labeled as “Goat”. select()
+is used to choose specific columns from the filtered dataset. In this
+case, it selects the columns “animal_name” (pet name) and
+“primary_breed”. The selected records are stored in the variable
+goat_records. arrange(goat_records, animal_name) sorts the
+“goat_records” dataset by the column “animal_name” in ascending order by
+default. The sorted goat records are stored in the variable
+sorted_goat_records. Finally, sorted_goat_records is displayed, showing
+the selected and sorted records for goats.
 
 \`7. (2 points)
 
@@ -166,6 +204,18 @@ sorted_records
 
 Write your narrative here
 
+The mutate() function from the dplyr package is used to create a new
+column named “pet” in the “seattlepets” dataset. This column is created
+by concatenating the columns “animal_name” and “species” with a
+separator ” - “. select(seattlepets, license_number, pet) selects the
+columns”license_number” and “pet” from the modified dataset. The %\>%
+operator (pipe operator) is used to pass the result of the previous
+operation (select()) as the first argument to the next operation
+(arrange()). arrange(pet) sorts the dataset by the “pet” column in
+ascending order. The sorted records are stored in the variable
+sorted_records. Finally, sorted_records is displayed, showing the
+selected and sorted records.
+
 \`8. (2 points)
 
 ``` r
@@ -182,7 +232,16 @@ print(species_plot)
 ```
 
 ![](Lab_project_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> Write
-your narrative here
+your narrative here ggplot(seattlepets, aes(x = species)) initializes a
+ggplot object with the dataset “seattlepets” and aesthetic mapping
+specifying that the x-axis represents the “species” column. geom_bar()
+adds a layer of bars to the plot, where each bar represents the count of
+occurrences of a particular species. labs() sets the title and labels
+for the axes. In the theme() function, axis.text.x = element_text(angle
+= 45, hjust = 1) adjusts the appearance of the x-axis labels by rotating
+them 45 degrees clockwise and adjusting their horizontal justification
+to 1 (right-aligned). The variable species_plot holds the ggplot object.
+Finally, print(species_plot) displays the plot.
 
 \`9. (2 points)
 
@@ -211,13 +270,15 @@ top_10_names
 
 \`a. What does the above code chunk do?
 
-\`b. Plot the counts of the pet names (animal_name) in top_10_names
-
 ``` r
 # Create a subset of data for the top 10 most common pet names
 top_10_names <- c("Lucy", "Charlie", "Luna", "Bella", "Max", "Cooper", "Daisy", "Buddy", "Molly", "Stella")
 top_10_subset <- filter(seattlepets, animal_name %in% top_10_names)
+```
 
+\`b. Plot the counts of the pet names (animal_name) in top_10_names
+
+``` r
 # Plot the counts of the pet names segmented by species
 pet_names_plot <- ggplot(top_10_subset, aes(x = animal_name, fill = species)) +
                   geom_bar(position = "dodge") +
